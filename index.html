@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Logware DEP - Módulo COG</title>
+    <title>Logware DEP</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -22,6 +21,85 @@
             padding: 3rem 1.5rem;
             text-align: center;
         }
+        .inputtable tr:not(.fble_htr) {
+            counter-increment: rowNumber;
+        }
+
+        .inputtable tr:not(.fble_htr) td:first-child::before {
+            content: counter(rowNumber);
+            min-width: 1em;
+            margin-right: 0.5em;
+            background-color:#e8e8e8;
+            padding:5px 10px;
+            border-radius:100%;
+            position: absolute;
+        }
+        .inputtable thead tr th:first-child .delcol.icon-button,
+        .inputtable thead tr th:nth-child(2) .delcol.icon-button,
+        .inputtable tbody tr:nth-child(2) .delrow.icon-button{
+            display: none;
+        }
+
+        .inputtable thead tr th:nth-last-child(-n+2) a {
+            display: none;
+        }
+        .inputtable tr:first-child td:last-child a {
+            display: none;
+        }
+        table.inputtable tr:last-child td a{
+            display:none;
+        }
+        .inputtable tr:last-child td:first-child input,
+        .inputtable tr:first-child td:first-child input,
+        .inputtable tr:first-child td:nth-last-child(-n+2) input,
+        .inputtable tr:last-child td:nth-last-child(-n+2) input
+        {
+            display: none;
+        }
+        .inputtable tr:last-child td:first-child,
+        .inputtable tr:first-child td:first-child,
+        .inputtable tr:first-child td:nth-last-child(-n+2),
+        .inputtable tr:last-child td:nth-last-child(-n+2)
+        {
+            position: relative ;
+            background-color:#e8e8e8;
+        }
+        .inputtable tr:last-child td:first-child::before {
+            content:'Demanda';
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            background-color:transparent;
+            font-weight: bold;
+        }
+        .inputtable tr:first-child td:first-child::before {
+            content:'De/Para';
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            background-color:transparent;
+            font-weight: bold;
+        }
+        .inputtable tr:first-child td:nth-last-child(-n+2)::before {
+            content:'Oferta';
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            background-color:transparent;
+            font-weight: bold;
+        }
+        .inputtable tr:first-child td:last-child::before{
+            display:none;
+        }
+        .tabelaResultado td{
+            border:1px solid black;
+        }
+
+
+
     </style>
     
     <link rel="stylesheet" href="assets/jquery.edittable.css" />
@@ -39,13 +117,21 @@
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item ">
-            <a class="nav-link" href="#">Início</a>
-          </li>
           <li class="nav-item active">
-            <a class="nav-link" href="#">COG <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="index.html">Início <span class="sr-only">(current)</span></a>
           </li>
-
+          <li class="nav-item ">
+            <a class="nav-link" href="cog.html">COG</a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="lnprog.html">LNPROG</a>
+          </li>
+            <li class="nav-item ">
+            <a class="nav-link" href="routeseq.html">ROUTESEQ</a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="tranlp.html">TRANLP</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -53,47 +139,15 @@
     <main role="main" class="container">
 
       <div class="starter-template">
-        <h1>COG</h1>
-        <p class="lead">Encontra a posição de uma única instalação pelo método do centro-de-gravidade exato.</p>
+        <h1>LOGWARE DEP</h1>
+        <p class="lead">Este é um trabalho desenvolvido para a conclusão da graduação em Engenharia de Produção pelos alunos Álvaro Gomides e Lucas Cypriano.</p>
       </div>
         
         
-        <div class="table-container">
-            <h2>Nome do problema:  <input type="text" id="name_problem" value="Problema1" /></h2>
-            
-            <h4>Fator de potência (T): <input type="text" class="number" id="scale_factor" value="0.5" /></h4>
-            <h4>Fator de escala (K): <input type="text" class="number" id="power_factor" value="50" /></h4>
-            <div id="table-data"></div>
-            <a href="#" class="sendjson btn btn-primary">Calcular</a> 
-            <a href="#" class="downloadjson btn btn-success">Baixar Arquivo</a> 
-            <div class="float-right">
-                <input type="file" id="selectFiles" value="Importar Arquivo" />
-                <button id="import" class="btn btn-warning">Ler Arquivo</button>
-            </div>
-
-        </div>
 
     </main><!-- /.container -->
 
-<div class="modal" id="myModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Resultado</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="modalScreen">
-        
-      </div>
-      <div class="modal-footer">
-        <a class="printscreen btn btn-success float-left" href="#">Salvar Relatório</a>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-      </div>
-    </div>
-  </div>
-</div>
+
     
     
     <!-- Bootstrap core JavaScript
@@ -108,163 +162,7 @@
     <script src="assets/jquery.edittable.js"></script>
     <script src="assets/html2canvas.js"></script>
     <script src="assets/Chart.bundle.js"></script>
-    
-    <script>
-        // Initialize table example 1
-        var eTable = $('#table-data').editTable({
-            field_templates: {
-                'number2' : {
-                    html: '<input type="text" class="number" />',
-                    getValue: function (input) {
-                        return $(input).attr('value');
-                    },
-                    setValue: function (input, value) {
-                        if ( value ){
-                            return $(input).attr('value',value);
-                        }
-                    }
-                },
-                'checkbox' : {
-                    html: '<input type="text" class="number" />',
-                    getValue: function (input) {
-                        return $(input).attr('value');
-                    },
-                    setValue: function (input, value) {
-                        return $(input).attr('value', value);
-                    }
-                },
-            },
-            row_template: ['text', 'checkbox', 'checkbox', 'checkbox', 'checkbox'],
-            fixed_cols: true,
-            headerCols: [
-                'Descrição',
-                'Coordenada X',
-                'Coordenada Y',
-                'Volume',
-                'Taxa de Transporte ($)'
-            ],
-            data:[
-                ['ponto 1','2','1','300','0.002'],
-                ['ponto 2','5','2','500','0.0015'],
-                ['ponto 3','9','1','170','0.002'],
-                ['ponto 4','7','4','120','0.0013'],
-                ['ponto 5','2','5','900','0.0015'],
-            ],
-            maxRows: 15,
-            
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-            first_row: false,
-        });
-        
-        
-        
-        // Send JSON data trough an ajax call
-        $('.sendjson').click(function () {
-            var postData = {
-                table: eTable.getJsonData(),
-                name: $('#name_problem').val(),
-                power_factor: $('#power_factor').val(),
-                scale_factor: $('#scale_factor').val()
-            }
-            $.ajax({
-                url: 	'https://logwaredep.herokuapp.com/cog',
-                /* 
-                
-                Usada para desenvolvimento local:
-                url: 	'http://127.0.0.1:5000/cog',
-                
-                */
-                type: 	'POST',
-                data: JSON.stringify(postData),
-                dataType: 'json',
-                table: eTable.getJsonData(),
-                contentType: "application/json",
-                complete: function (result) {
-                    console.log(result.responseText);
-                    $('.modal-body').html(result.responseText);
-                    $('#myModal').modal('show');
-                }
-            });
-            return false;
-        });
-        
-        
-        $(".downloadjson").click(function() {
-            var $nameFile = $('#name_problem').val() + '.json';
-            
-            var postData = {
-                table: eTable.getJsonData(),
-                name: $('#name_problem').val(),
-                power_factor: $('#power_factor').val(),
-                scale_factor: $('#scale_factor').val()
-            }
-            
-            
-          $("<a />", {
-            "download": $nameFile,
-            "href" : "data:application/json," + encodeURIComponent(JSON.stringify(postData))
-          }).appendTo("body")
-          .click(function() {
-             $(this).remove()
-          })[0].click()
-        })
-        
-        
-        document.getElementById('import').onclick = function() {
-            var files = document.getElementById('selectFiles').files;
-          console.log(files);
-          if (files.length <= 0) {
-            return false;
-          }
-
-          var fr = new FileReader();
-
-          fr.onload = function(e) { 
-          console.log(e);
-            var result = JSON.parse(e.target.result);
-              
-             
-            var formatted = JSON.stringify(result, null, 2);
-              eTable.loadJsonData(result['table']); 
-              $('#name_problem').val(result['name']);
-              $('#power_factor').val(result['power_factor']);
-              $('#scale_factor').val(result['scale_factor']);
-          }
-
-          fr.readAsText(files.item(0));
-        };
-        
-        $('.printscreen').click(function(){
-            html2canvas(document.querySelector('#modalScreen')).then(function(canvas) {
-
-                console.log(canvas);
-                saveAs(canvas.toDataURL(), $('#name_problem').val()+'-relatorio.png');
-            });
-            
-        });
-        
-        function saveAs(uri, filename) {
-            var link = document.createElement('a');
-            if (typeof link.download === 'string') {
-                link.href = uri;
-                link.download = filename;
-                //Firefox requires the link to be in the body
-                document.body.appendChild(link);
-                //simulate click
-                link.click();
-                //remove the link when done
-                document.body.removeChild(link);
-            } else {
-                window.open(uri);
-            }
-        }
-        
-        $('.number').keypress(function(event) {
-          if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
-            event.preventDefault();
-          }
-        });
-    </script>
-    
 </body>
 </html>
